@@ -9,6 +9,7 @@ Go to server folder, and run the following command :
 Go to client folder, and run these 3 commands sequentially :
 * npm install
 * npm run dev
+Run the front end on http://localhost:3000
 
 ## API documentation
 
