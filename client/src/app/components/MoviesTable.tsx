@@ -88,7 +88,7 @@ export default function MoviesTable() {
             <table style={{ marginTop: '20px' }} className="table table-bordered" id="moviesTable">
                 <thead>
                     <tr>
-                        <th width="40%">Title</th>
+                        <th style={{width: "40%"}}>Title</th>
                         <th>Year</th>
                         <th>Genre</th>
                         <th>Image</th>
