@@ -1,12 +1,13 @@
 # movie-management-system
 Simple CRUD application for movie management using PHP and React JS
 
-## For running the backend
+## For running the backend (PHP v8)
 Go to server folder, and run the following command :
 * php -S localhost:8000
 
-## For running the frontend
-Go to client folder, and run these 2 command sequentially :
+## For running the frontend (React JS v18, Next JS v14)
+Go to client folder, and run these 3 commands sequentially :
+* npm install
 * npm run build
 * npm run start
 
