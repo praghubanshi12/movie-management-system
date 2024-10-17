@@ -38,7 +38,7 @@ export default function MoviesFormModal() {
         toast.success(addOrEditMovieResponse.message, { position: 'top-right' });
     }
 
-    const handleInputChange = async (e) => {
+    const handleInputChange = async (e: any) => {
         switch (e.target.type) {
             case 'text':
             case 'number':
@@ -86,7 +86,7 @@ export default function MoviesFormModal() {
         <div
             className="modal fade"
             id="movieFormModal"
-            tabIndex="-1"
+            tabIndex={-1}
             aria-labelledby="movieFormModalLabel"
             aria-hidden="true"
         >
