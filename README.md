@@ -8,8 +8,7 @@ Go to server folder, and run the following command :
 ## For running the frontend (React JS v18, Next JS v14)
 Go to client folder, and run these 3 commands sequentially :
 * npm install
-* npm run build
-* npm run start
+* npm run dev
 
 ## API documentation
 
