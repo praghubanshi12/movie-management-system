@@ -1,4 +1,4 @@
-# movie-management-project
+# movie-management-system
 Simple CRUD application for movie management using PHP and React JS
 
 ## For running the backend
