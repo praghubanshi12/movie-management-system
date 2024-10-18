@@ -6,6 +6,10 @@ import useMoviesApiHandler from '../custom-hooks/useMoviesApiHandler';
 import useMoviesPaginationHelper from '../custom-hooks/useMoviesPaginationHelper';
 import useMoviesModalHandler from '../custom-hooks/useMoviesModalHandler';
 
+interface imageLoadingStatusMap {
+    [key: number] : boolean | undefined
+}
+
 export default function MoviesTable() {
     const { movies, setMovies } = useContext<any>(MoviesContext);
     const [hasDataFetchError, setHasDataFetchError] = useState(false);
@@ -17,6 +21,7 @@ export default function MoviesTable() {
         showPaginationScrollingLoadingBar,
         updatePaginationDetailsAfterDataLoad
     } = useMoviesPaginationHelper();
+    const [imagesLoadingStatus, setImagesLoadingStatus] = useState<imageLoadingStatusMap>({});
     const { loadMoviesEditModalWithFormDetails } = useMoviesModalHandler();
 
     useEffect(() => {
@@ -35,6 +40,12 @@ export default function MoviesTable() {
         increasePageNumber();
     };
 
+    const handleImageLoad = (movieId : number) => {
+        // setTimeout(() => {
+            setImagesLoadingStatus((prev) => ({...prev, [movieId]: false}));
+        // }, 2000)
+    }
+
     const fetchData = async (page: number) => {
         showPaginationScrollingLoadingBar();
         const fetchMoviesResponse = await fetchMovies(page);
@@ -42,8 +53,14 @@ export default function MoviesTable() {
             setHasDataFetchError(true);
             return;
         }
+        let updatedImagesLoadingStatus : imageLoadingStatusMap = {...imagesLoadingStatus};
+        fetchMoviesResponse.data.forEach((movie: Movie) => {
+            updatedImagesLoadingStatus[movie.id] = true;
+        });
         // setTimeout(() =>
+            // setImagesStatus(currentlyFetchedMovieImages);
             setMovies((prev: any) => [...prev, ...fetchMoviesResponse.data]);
+            setImagesLoadingStatus(updatedImagesLoadingStatus);
             updatePaginationDetailsAfterDataLoad(fetchMoviesResponse.data.length);
         // }, 2000)
     };
@@ -81,7 +98,6 @@ export default function MoviesTable() {
         };
     }
 
-
     return (
         <>
             <Toaster richColors />
@@ -103,7 +119,10 @@ export default function MoviesTable() {
                                 <td>{movie.year_of_release}</td>
                                 <td>{movie.genre}</td>
                                 <td>
-                                    <img src={movie.link_to_movie_image} style={{ height: '150px', width: '150px' }}
+                                    <img src={movie.link_to_movie_image} style={{ height: '150px', width: '150px', 
+                                        filter: imagesLoadingStatus[movie.id] ? 'blur(2px)' : 'blur()'
+                                    }}
+                                        onLoad={ () => handleImageLoad(movie.id)}
                                         onError={({ currentTarget }) => {
                                             currentTarget.onerror = null;
                                             currentTarget.src = "http://localhost:8000/uploads/placeholder.png";
