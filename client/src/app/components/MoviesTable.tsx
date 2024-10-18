@@ -8,8 +8,9 @@ import useMoviesModalHandler from '../custom-hooks/useMoviesModalHandler';
 import { SERVER_BASE_URL } from '../const/const';
 
 interface imageLoadingStatusMap {
-    [key: number] : boolean | undefined
+    [key: number]: boolean | undefined
 }
+let handleScrollTimeout: any;
 
 export default function MoviesTable() {
     const { movies, setMovies } = useContext<any>(MoviesContext);
@@ -37,13 +38,17 @@ export default function MoviesTable() {
     }, [paginatedScrollingDetails.loading]);
 
     const handleScroll = () => {
+        clearTimeout(handleScrollTimeout);
         if (!checkHasMoreIfScrolledToBottom()) return;
-        increasePageNumber();
+        else showPaginationScrollingLoadingBar();
+        handleScrollTimeout = setTimeout(() => {
+            increasePageNumber();
+        }, 1000);
     };
 
-    const handleImageLoad = (movieId : number) => {
+    const handleImageLoad = (movieId: number) => {
         // setTimeout(() => {
-            setImagesLoadingStatus((prev) => ({...prev, [movieId]: false}));
+        setImagesLoadingStatus((prev) => ({ ...prev, [movieId]: false }));
         // }, 2000)
     }
 
@@ -54,15 +59,15 @@ export default function MoviesTable() {
             setHasDataFetchError(true);
             return;
         }
-        let updatedImagesLoadingStatus : imageLoadingStatusMap = {...imagesLoadingStatus};
+        let updatedImagesLoadingStatus: imageLoadingStatusMap = { ...imagesLoadingStatus };
         fetchMoviesResponse.data.forEach((movie: Movie) => {
             updatedImagesLoadingStatus[movie.id] = true;
         });
         // setTimeout(() =>
-            // setImagesStatus(currentlyFetchedMovieImages);
-            setMovies((prev: any) => [...prev, ...fetchMoviesResponse.data]);
-            setImagesLoadingStatus(updatedImagesLoadingStatus);
-            updatePaginationDetailsAfterDataLoad(fetchMoviesResponse.data.length);
+        // setImagesStatus(currentlyFetchedMovieImages);
+        setMovies((prev: any) => [...prev, ...fetchMoviesResponse.data]);
+        setImagesLoadingStatus(updatedImagesLoadingStatus);
+        updatePaginationDetailsAfterDataLoad(fetchMoviesResponse.data.length);
         // }, 2000)
     };
 
@@ -105,7 +110,7 @@ export default function MoviesTable() {
             <table style={{ marginTop: '20px' }} className="table table-bordered" id="moviesTable">
                 <thead>
                     <tr>
-                        <th style={{width: "40%"}}>Title</th>
+                        <th style={{ width: "40%" }}>Title</th>
                         <th>Year</th>
                         <th>Genre</th>
                         <th>Image</th>
@@ -120,10 +125,11 @@ export default function MoviesTable() {
                                 <td>{movie.year_of_release}</td>
                                 <td>{movie.genre}</td>
                                 <td>
-                                    <img src={movie.link_to_movie_image} style={{ height: '150px', width: '150px', 
+                                    <img src={movie.link_to_movie_image} style={{
+                                        height: '150px', width: '150px',
                                         filter: imagesLoadingStatus[movie.id] ? 'blur(2px)' : 'blur()'
                                     }}
-                                        onLoad={ () => handleImageLoad(movie.id)}
+                                        onLoad={() => handleImageLoad(movie.id)}
                                         onError={({ currentTarget }) => {
                                             currentTarget.onerror = null;
                                             currentTarget.src = `${SERVER_BASE_URL}/uploads/placeholder.png`;
