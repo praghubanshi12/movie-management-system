@@ -1,3 +1,5 @@
+export const SERVER_BASE_URL = "http://localhost:8000";
+
 export const formModes = {
     CREATE_MODE: 'POST',
     EDIT_MODE: 'PUT'
@@ -10,4 +12,4 @@ export const initialMovieFormData = {
     genre: "",
     link_to_movie_image: "",
     image: null
-  }
+}

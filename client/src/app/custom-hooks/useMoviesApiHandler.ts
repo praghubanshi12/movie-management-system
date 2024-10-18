@@ -1,13 +1,13 @@
 import React, { useContext } from 'react'
 import { MoviesContext } from '../context/MoviesContext';
-import { formModes } from '../const/const';
+import { SERVER_BASE_URL, formModes } from '../const/const';
 import { toast } from 'sonner';
 
 export default function useMoviesApiHandler() {
     const { movieFormDetails } = useContext<any>(MoviesContext);
 
     const fetchMovies = async (page: number, limit: number = 15) => {
-        const response = await fetch(`http://localhost:8000/movies.php?page=${page}&limit=${limit}`);
+        const response = await fetch(`${SERVER_BASE_URL}/movies.php?page=${page}&limit=${limit}`);
         const result = await response.json();
         if (!response.ok) {
             toast.error(result.message || "Something Went Wrong", { position: 'top-right' });
@@ -28,7 +28,7 @@ export default function useMoviesApiHandler() {
         };
 
         let additionalFormChangeUrl = movieFormDetails.mode == formModes.EDIT_MODE ? `/${formBody.id}` : '';
-        const response = await fetch(`http://localhost:8000/movies.php${additionalFormChangeUrl}`, requestOptions);
+        const response = await fetch(`${SERVER_BASE_URL}/movies.php${additionalFormChangeUrl}`, requestOptions);
         const result = await response.json();
         if (!response.ok) {
             toast.error(result.message || "Something Went Wrong", { position: 'top-right' });
@@ -41,7 +41,7 @@ export default function useMoviesApiHandler() {
         const requestOptions = {
             method: 'DELETE',
         };
-        const response = await fetch(`http://localhost:8000/movies.php/${id}`, requestOptions);
+        const response = await fetch(`${SERVER_BASE_URL}/movies.php/${id}`, requestOptions);
         const result = await response.json();
         if (!response.ok) {
             toast.error(result.message || "Something Went Wrong", { position: 'top-right' });

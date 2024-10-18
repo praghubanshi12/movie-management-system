@@ -5,6 +5,7 @@ import { Toaster, toast } from 'sonner';
 import useMoviesApiHandler from '../custom-hooks/useMoviesApiHandler';
 import useMoviesPaginationHelper from '../custom-hooks/useMoviesPaginationHelper';
 import useMoviesModalHandler from '../custom-hooks/useMoviesModalHandler';
+import { SERVER_BASE_URL } from '../const/const';
 
 interface imageLoadingStatusMap {
     [key: number] : boolean | undefined
@@ -125,7 +126,7 @@ export default function MoviesTable() {
                                         onLoad={ () => handleImageLoad(movie.id)}
                                         onError={({ currentTarget }) => {
                                             currentTarget.onerror = null;
-                                            currentTarget.src = "http://localhost:8000/uploads/placeholder.png";
+                                            currentTarget.src = `${SERVER_BASE_URL}/uploads/placeholder.png`;
                                         }}
                                     />
                                 </td>
